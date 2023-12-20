@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="./md5.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app" @keyup.enter="func_post">
+        <textarea v-model="query" placeholder="请输入要翻译的内容" autofocus="true" @keyup.enter="func_fanyi" cols="50" rows="10"></textarea>
+        <button @click="func_fanyi">翻译</button>
+        <br>
+        翻译结果：<!-- <input v-model="translate_ret"> -->
+        <br>
+        <textarea v-model="translate_ret" placeholder="..." autofocus="true" @keyup.enter="func_fanyi" cols="200" rows="20"></textarea>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el:'#app',
+            data:{
+                query:"",
+                translate_ret:"",
+                appid:'20231220001916715',
+                key:'N9ZQWbmw2z0txacNk7vh',
+                salt:'1435660288',
+                from:'en',
+                to:'zh',
+            },
+            methods:{
+                func_get(){
+                    fetch("http://api.fanyi.baidu.com/api/trans/vip/translate?q=apple&from=en&to=zh&appid=2015063000000001&salt=1435660288&sign=f89f9594663708c1605f3d736d01d2d4")
+                    .then(response =>{
+                        if(!response.ok){
+                            throw new Error('error');
+                        }
+                        return response.text();
+                    })
+                    .then(data=>{
+                        console.log(data);
+                        this.msg1 = data;
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+                },
+                func_post(){
+                    console.log('post....');
+                    var formData = new FormData();
+                    formData.append('postmsg', this.msg2_send);
+                    fetch("http://182.92.208.248/strp",{
+                        method:"POST",
+                        body:formData,
+                    })
+                    .then(response =>{
+                        if(!response.ok){
+                            throw new Error('asdllkzlzklkz');
+                        }
+                        return response.text();
+                    })
+                    .then(data=>{
+                        console.log(data);
+                        this.msg2 = data;
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+                },
+                func_fanyi(){
+                    var str1 = this.appid+this.query+this.salt+this.key;
+                    var sign = MD5(str1);
+                    $.ajax({
+                        url: 'http://api.fanyi.baidu.com/api/trans/vip/translate',
+                        type: 'get',
+                        dataType: 'jsonp',
+                        data: {
+                            q: this.query,
+                            appid: this.appid,
+                            salt: this.salt,
+                            from: this.from,
+                            to: this.to,
+                            sign: sign
+                        },
+                        success:  (data) => {
+                            /*这里使用箭头函数是因为要保持上下文信息，否则VUE的this将无法作用*/
+                            var temp = data.trans_result[0].dst;
+                            this.translate_ret = temp;
+                        } 
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+</html>
