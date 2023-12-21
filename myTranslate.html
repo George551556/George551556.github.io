@@ -16,6 +16,8 @@
         翻译结果：<!-- <input v-model="translate_ret"> -->
         <br>
         <textarea v-model="translate_ret" placeholder="..." autofocus="true" @keyup.enter="func_fanyi" cols="200" rows="20"></textarea>
+        <br>
+        <button @click="func_copy">复制</button>
     </div>
 
     <script>
@@ -90,6 +92,15 @@
                             this.translate_ret = temp;
                         } 
                     });
+                },
+                func_copy(){
+                    var temparea = document.createElement('textarea');
+                    temparea.value = this.translate_ret;
+                    document.body.appendChild(temparea);
+                    temparea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(temparea);
+                    console.log('已复制');
                 }
             }
         })
