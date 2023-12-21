@@ -46,6 +46,8 @@
             <h2>中英互译</h2>
         </div>
         <div class="container">
+            <button @click="func_EnToCh" style="margin-right: 100px;font-size: 18px;border-radius: 8px;">翻译</button>
+            <button @click="func_ChToEn" style="font-size: 18px;border-radius: 8px;">翻译</button>
         </div>
         <div class="container">
             <textarea v-model="content_english" placeholder="英文区域" autofocus="true" @keyup.enter="func_EnToCh" rows="15" class="area_raw" :style="{animation:animating_left ? 'flash 0.5s infinite':'none', backgroundColor:bgColor}"></textarea>
