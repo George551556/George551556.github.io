@@ -11,9 +11,11 @@
         .area_raw{
             font-size: 18px;
             margin-right: 8px;
+            width: 40%;
         }
         .area_ret{
             font-size: 18px;
+            width: 40%;
         }
         .container {
             /* 使用 Flexbox 布局 */
@@ -27,6 +29,14 @@
             /* 或者使用 flex 属性来调整空间分配 */
             flex: 1;
         }
+        body{
+            background-color: #f2f2f2;
+        }
+        @keyframes flash {
+            0% { background-color: white; }
+            50% { background-color: yellow; }
+            100% { background-color: white; }
+        }
 
     </style>
 </head>
@@ -38,12 +48,12 @@
         <div class="container">
         </div>
         <div class="container">
-            <textarea v-model="content_english" placeholder="英文区域" autofocus="true" @keyup.enter="func_EnToCh" cols="120" rows="15" class="area_raw"></textarea>
+            <textarea v-model="content_english" placeholder="英文区域" autofocus="true" @keyup.enter="func_EnToCh" rows="15" class="area_raw" :style="{animation:animating_left ? 'flash 0.5s infinite':'none', backgroundColor:bgColor}"></textarea>
             <br>
-            <textarea v-model="content_chinese" placeholder="中文区域" autofocus="true" @keyup.enter="func_ChToEn" cols="120" rows="15" class="area_ret"></textarea>
+            <textarea v-model="content_chinese" placeholder="中文区域" @keyup.enter="func_ChToEn" rows="15" class="area_ret":style="{animation:animating_right ? 'flash 0.5s infinite':'none', backgroundColor:bgColor}"></textarea>
             <br>
         </div>
-        <div class="container">
+        <div class="container" style="margin-top: 5px;">
             <button @click="func_copyEnglish" style="margin-right: 100px;font-size: 18px;border-radius: 8px;">复制英文</button>
             <button @click="func_copyChinese" style="font-size: 18px;border-radius: 8px;">复制中文</button>
         </div>
@@ -62,6 +72,9 @@
                 salt:'1435660288',
                 from:'en',
                 to:'zh',
+                bgColor:'white',
+                animating_left: false,
+                animating_right: false,
             },
             methods:{
                 func_get(){
@@ -121,6 +134,7 @@
                             /*这里使用箭头函数是因为要保持上下文信息，否则VUE的this将无法作用*/
                             var temp = data.trans_result[0].dst;
                             this.content_chinese = temp;
+                            this.startAnimation(1);
                         } 
                     });
                 },
@@ -135,14 +149,15 @@
                             q: this.content_chinese,
                             appid: this.appid,
                             salt: this.salt,
-                            from: 'zh',
-                            to: 'en',
+                            from: this.to,
+                            to: this.from,
                             sign: sign
                         },
                         success:  (data) => {
                             /*这里使用箭头函数是因为要保持上下文信息，否则VUE的this将无法作用*/
                             var temp = data.trans_result[0].dst;
                             this.content_english = temp;
+                            this.startAnimation(0);
                         } 
                     });
                 },
@@ -163,6 +178,24 @@
                     document.execCommand('copy');
                     document.body.removeChild(temparea);
                     console.log('已复制');
+                },
+                startAnimation(slt){
+                    if(slt==0){
+                        //左边闪烁
+                        this.animating_left = true;
+                        setTimeout(() => {
+                            this.animating_left = false;
+                            this.bgColor = 'white';
+                        }, 1500);
+                    }
+                    else{
+                        //右边闪烁
+                        this.animating_right = true;
+                        setTimeout(() => {
+                            this.animating_right = false;
+                            this.bgColor = 'white';
+                        }, 1500);
+                    }
                 },
             }
         })
