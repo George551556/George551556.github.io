@@ -7,24 +7,55 @@
     <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="./md5.js"></script>
     <title>Document</title>
+    <style>
+        .area_raw{
+            font-size: 18px;
+            margin-right: 8px;
+        }
+        .area_ret{
+            font-size: 18px;
+        }
+        .container {
+            /* 使用 Flexbox 布局 */
+            display: flex;
+            justify-content: center;
+        }
+
+        .container div {
+            /* 如果需要添加间距，可以使用 margin 或者 flex 属性 */
+            margin-right: 10px;
+            /* 或者使用 flex 属性来调整空间分配 */
+            flex: 1;
+        }
+
+    </style>
 </head>
 <body>
-    <div id="app" @keyup.enter="func_post">
-        <textarea v-model="query" placeholder="请输入要翻译的内容" autofocus="true" @keyup.enter="func_fanyi" cols="50" rows="10"></textarea>
-        <button @click="func_fanyi">翻译</button>
-        <br>
-        翻译结果：<!-- <input v-model="translate_ret"> -->
-        <br>
-        <textarea v-model="translate_ret" placeholder="..." autofocus="true" @keyup.enter="func_fanyi" cols="200" rows="20"></textarea>
-        <br>
-        <button @click="func_copy">复制</button>
+    <div id="app">
+        <div class="container">
+            <h2>中英互译</h2>
+        </div>
+        <div class="container">
+        </div>
+        <div class="container">
+            <textarea v-model="content_english" placeholder="英文区域" autofocus="true" @keyup.enter="func_EnToCh" cols="120" rows="15" class="area_raw"></textarea>
+            <br>
+            <textarea v-model="content_chinese" placeholder="中文区域" autofocus="true" @keyup.enter="func_ChToEn" cols="120" rows="15" class="area_ret"></textarea>
+            <br>
+        </div>
+        <div class="container">
+            <button @click="func_copyEnglish" style="margin-right: 100px;font-size: 18px;border-radius: 8px;">复制英文</button>
+            <button @click="func_copyChinese" style="font-size: 18px;border-radius: 8px;">复制中文</button>
+        </div>
+
     </div>
 
     <script>
         var app = new Vue({
             el:'#app',
             data:{
-                query:"",
+                content_english:"",
+                content_chinese:"",
                 translate_ret:"",
                 appid:'20231220001916715',
                 key:'N9ZQWbmw2z0txacNk7vh',
@@ -71,15 +102,15 @@
                         console.error('Fetch error:', error);
                     });
                 },
-                func_fanyi(){
-                    var str1 = this.appid+this.query+this.salt+this.key;
+                func_EnToCh(){
+                    var str1 = this.appid+this.content_english+this.salt+this.key;
                     var sign = MD5(str1);
                     $.ajax({
                         url: 'http://api.fanyi.baidu.com/api/trans/vip/translate',
                         type: 'get',
                         dataType: 'jsonp',
                         data: {
-                            q: this.query,
+                            q: this.content_english,
                             appid: this.appid,
                             salt: this.salt,
                             from: this.from,
@@ -89,19 +120,50 @@
                         success:  (data) => {
                             /*这里使用箭头函数是因为要保持上下文信息，否则VUE的this将无法作用*/
                             var temp = data.trans_result[0].dst;
-                            this.translate_ret = temp;
+                            this.content_chinese = temp;
                         } 
                     });
                 },
-                func_copy(){
+                func_ChToEn(){
+                    var str1 = this.appid+this.content_chinese+this.salt+this.key;
+                    var sign = MD5(str1);
+                    $.ajax({
+                        url: 'http://api.fanyi.baidu.com/api/trans/vip/translate',
+                        type: 'get',
+                        dataType: 'jsonp',
+                        data: {
+                            q: this.content_chinese,
+                            appid: this.appid,
+                            salt: this.salt,
+                            from: 'zh',
+                            to: 'en',
+                            sign: sign
+                        },
+                        success:  (data) => {
+                            /*这里使用箭头函数是因为要保持上下文信息，否则VUE的this将无法作用*/
+                            var temp = data.trans_result[0].dst;
+                            this.content_english = temp;
+                        } 
+                    });
+                },
+                func_copyEnglish(){
                     var temparea = document.createElement('textarea');
-                    temparea.value = this.translate_ret;
+                    temparea.value = this.content_english;
                     document.body.appendChild(temparea);
                     temparea.select();
                     document.execCommand('copy');
                     document.body.removeChild(temparea);
                     console.log('已复制');
-                }
+                },
+                func_copyChinese(){
+                    var temparea = document.createElement('textarea');
+                    temparea.value = this.content_chinese;
+                    document.body.appendChild(temparea);
+                    temparea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(temparea);
+                    console.log('已复制');
+                },
             }
         })
     </script>
