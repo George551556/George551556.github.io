@@ -118,14 +118,15 @@
                     });
                 },
                 func_EnToCh(){
-                    var str1 = this.appid+this.content_english+this.salt+this.key;
+                    var temp_msg = this.content_english.replace(/(\r\n|\n|\r)/gm, ", ");
+                    var str1 = this.appid+temp_msg+this.salt+this.key;
                     var sign = MD5(str1);
                     $.ajax({
                         url: 'http://api.fanyi.baidu.com/api/trans/vip/translate',
                         type: 'get',
                         dataType: 'jsonp',
                         data: {
-                            q: this.content_english,
+                            q: temp_msg,
                             appid: this.appid,
                             salt: this.salt,
                             from: this.from,
@@ -141,14 +142,15 @@
                     });
                 },
                 func_ChToEn(){
-                    var str1 = this.appid+this.content_chinese+this.salt+this.key;
+                    var temp_msg = this.content_chinese.replace(/(\r\n|\n|\r)/gm, ", ");
+                    var str1 = this.appid+temp_msg+this.salt+this.key;
                     var sign = MD5(str1);
                     $.ajax({
                         url: 'http://api.fanyi.baidu.com/api/trans/vip/translate',
                         type: 'get',
                         dataType: 'jsonp',
                         data: {
-                            q: this.content_chinese,
+                            q: temp_msg,
                             appid: this.appid,
                             salt: this.salt,
                             from: this.to,
