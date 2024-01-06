@@ -40,6 +40,15 @@
         button:hover{
             background-color: orangered;
         }
+        .fortune {
+            color: #888; /* 使用淡灰色文本，可调整颜色 */
+            opacity: 0.8; /* 降低文字的不透明度，使其看起来更淡 */
+            border: 1px solid #ccc; /* 添加淡灰色边框，可调整颜色和边框宽度 */
+            padding: 10px; /* 可选 - 添加内边距以增加内容与边框之间的间距 */
+            margin-top: 50px;
+            user-select: none;
+        }
+
     </style>
 </head>
 <body>
@@ -63,6 +72,9 @@
             <button @click="func_copyEnglish" style="margin-right: 100px;font-size: 18px;border-radius: 8px;">复制英文</button>
             <button @click="func_copyChinese" style="font-size: 18px;border-radius: 8px;">复制中文</button>
         </div>
+        <div class="fortune">
+            {{fortune}}
+        </div>
 
     </div>
 
@@ -81,6 +93,7 @@
                 bgColor:'white',
                 animating_left: false,
                 animating_right: false,
+                fortune:'',
             },
             methods:{
                 func_get(){
@@ -253,9 +266,35 @@
                     }
                 },
             },
+            mounted(){
+                fetch("http://182.92.208.248/str_f")
+                .then(response=>{
+                    if(!response.ok){
+                        throw new Error("get fail...");
+                    }
+                    return response.json();
+                })
+                .then(data=>{
+                    console.log('fortune get success!!!')
+                    this.fortune = data.fortune;
+                })
+                .catch(error=>{
+                    console.error('fail...')
+                });
+            },
             created(){
-                // console.log("直接运行上传 ");
-                // this.upload_trans_info("你好", "hello");
+                console.log("直接运行created");
+                // $.ajax({
+                //     url:"http://182.92.208.248/str_f",
+                //     type:'get',
+                //     dataType:'jsonp',
+                //     data:{},
+                //     success: (data) =>{
+                //         this.fortune = data;
+                //         console.log("fortune获取成功");
+                //     }
+                // });
+
             }
         })
     </script>
