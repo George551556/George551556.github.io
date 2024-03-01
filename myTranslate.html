@@ -267,20 +267,29 @@
                 },
             },
             mounted(){
-                fetch("http://182.92.208.248/str_f")
+                // 获取我服务器的
+                // fetch("http://182.92.208.248/str_f")
+                // .then(response=>{
+                //     if(!response.ok){
+                //         throw new Error("get fail...");
+                //     }
+                //     return response.json();
+                // })
+                // .then(data=>{
+                //     console.log('fortune get success!!!')
+                //     this.fortune = data.fortune;
+                // })
+                // .catch(error=>{
+                //     console.error('fail...')
+                // });
+                //获取公共平台的
+                fetch("https://v1.hitokoto.cn/")
                 .then(response=>{
-                    if(!response.ok){
-                        throw new Error("get fail...");
-                    }
                     return response.json();
                 })
                 .then(data=>{
-                    console.log('fortune get success!!!')
-                    this.fortune = data.fortune;
+                    this.fortune = data.hitokoto+"《"+data.from+"》"+"---"+data.from_who;
                 })
-                .catch(error=>{
-                    console.error('fail...')
-                });
             },
             created(){
                 console.log("直接运行created");
