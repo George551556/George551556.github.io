@@ -130,8 +130,8 @@
     <input type="button" value="搜索(默认)" onclick="jump_baidu()" style="background-color: dodgerblue; font-size: 20px;border-radius: 13px"title="按下回车即可搜索">
     <input type="button" value="CSDN搜索(+1)" onclick="jump_CSDN()" style="background-color: orange; font-size: 20px;border-radius: 13px"/>
     <input type="button" value="哔哩哔哩(+2)" onclick="jump_bilibili()" style="background-color: coral; font-size: 20px;border-radius: 13px"/><br>
-    <input type="button" value="英汉互译(+space)" onclick="jump_fanyi_en_ch()" style="font-size: 20px;border-radius: 13px"/>
     <input type="button" value="知乎(+3)" onclick="jump_fanyi_en_ch()" style="font-size: 20px;border-radius: 13px"/>
+    <input type="button" value="谷歌搜索(+4)" onclick="jump_fanyi_en_ch()" style="font-size: 20px;border-radius: 13px"/>
     <button onclick="jump_myTranslate()" style="font-size: 20px;border-radius: 13px">我的翻译</button>
    <hr>
 
@@ -300,6 +300,8 @@
         //     return "https://fanyi.baidu.com/?aldtype=16047#en/zh/"+wd;
         else if (search_index=='3')//知乎
             return "https://www.zhihu.com/search?type=content&q="+wd;
+        else if (search_index=='4')//谷歌
+            return "https://www.google.com/search?q="+wd;
         else
             return "https://cn.bing.com/search?q="+wd_init;
     }
