@@ -10,8 +10,13 @@
         body{
             /*background: linear-gradient(100deg,#ffb6c1 , #9795f0);渐变背景色*/
             /* background-color: navajowhite; */
-            background-image: url("https://vip.helloimg.com/i/2024/04/07/6612617a73ab0.jpg");
+            /* background-image: url("https://vip.helloimg.com/i/2024/04/07/6612617a73ab0.jpg");
+            background-size: cover; */
+
+            /* 确保背景图片覆盖整个页面 */
             background-size: cover;
+            background-attachment: fixed;
+            background-position: center center;
         }
         .fl{
             width:20%;
@@ -39,19 +44,47 @@
         .main_search:focus-within{
             box-shadow: 0 0 10px rgba(0,0,0,0.6);
         }
-        .sites_container{ /*每个网址的div */
+        .sites_container {
             width: 160px;
             height: fit-content;
-            /* background: linear-gradient(100deg,#54f26f , #f8c90e); */
-            background-color: rgb(219, 200, 170);
-            border-radius:8px;
+            background-color: rgba(232, 245, 254, 0.8); /* 设置背景颜色为半透明 */
+            border-radius: 8px;
             border: 2px solid #000;
             margin-bottom: 3px;
             display: inline-block;
             font-size: 20px;
+            overflow: hidden; /* 确保子元素不会超出容器边界 */
+            position: relative; /* 为伪元素定位做准备 */
         }
-        div.sites_container:hover {
-            background-color: orange;
+        .sites_container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%'><defs><filter id='blur'><feGaussianBlur in='SourceGraphic' stdDeviation='5' /></filter></defs><rect x='0' y='0' width='100%' height='100%' fill='url(#blur)' /></svg>");
+            filter: url(#blur); /* 应用高斯模糊滤镜 */
+            border-radius: 8px; /* 确保模糊效果与容器边界一致 */
+            z-index: -1; /* 确保模糊背景在内容之后 */
+        }
+        .sites_container:hover {
+            transform: scale(1.1); /* 增加悬停时的缩放比例 */
+            background-color: rgba(180, 231, 238, 0.9); /* 调整悬停时的背景颜色 */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 增加阴影深度 */
+            animation: pulse 1s infinite; /* 添加脉冲动画效果 */
+        }
+        /* 脉冲动画效果 */
+        @keyframes pulse {
+            0% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1.25);
+            }
+            100% {
+                transform: scale(1.2);
+            }
         }
 
     </style>
@@ -345,6 +378,15 @@
 
 <script>
     var chuansongmen = document.getElementById("chuansongmen");
+    const now = new Date();
+    const bg_images = [
+        "https://vip.helloimg.com/i/2024/04/07/6612617a73ab0.jpg",
+        "https://vip.helloimg.com/i/2024/04/07/66126f84e5641.jpg",
+        "https://vip.helloimg.com/i/2024/04/07/66126f8e855d8.jpg",
+        "https://vip.helloimg.com/i/2024/04/07/66126c368de86.png",
+    ];
+
+
     document.getElementById("wd").focus();
     document.onkeydown = KeyPress;
     function KeyPress(){//监测按键（回车）情况 
@@ -402,9 +444,6 @@
     //     }
     // }
     
-    
-
-
     function fun_chachacha() {//清除输入框内容
         var wd = document.getElementById("wd");
         wd.value="";
@@ -413,6 +452,24 @@
     chuansongmen.addEventListener("click", ()=>{
         window.location.href = "http://182.92.208.248/control/tousermainpage";
     });
+
+    // 根据时间段选择图片
+    function selectImage() {
+        if (now.getHours() >= 6 && now.getHours() < 11) {
+            // 早上6点到12点
+            return bg_images[0];
+        } else if (now.getHours() >= 11 && now.getHours() < 15) {
+            // 中午12点到下午6点
+            return bg_images[1];
+        } else if(now.getHours() >= 15 && now.getHours() <19){
+            return bg_images[2];
+        } else {
+            // 晚上7点到次日早上6点
+            return bg_images[3];
+        }
+    }
+    // 设置背景图片
+    document.body.style.backgroundImage = "url('" + selectImage() + "')";
 </script>
 
 </html>
