@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>ev</title>
-<!--    <link rel = "stylesheet" type= "text/css" href = "lantern/lantern.css" media = "screen" />-->
     <link rel="icon" href="image/ico1.ico" type="image/x-icon">
 
     <style>
@@ -87,71 +86,57 @@
             }
         }
 
+        /* 按钮容器样式 */
+        .button-container {
+        width: 10%;
+        height: fit-content;
+        background-color: rgba(232, 245, 254, 0.7); /* 设置背景颜色为半透明 */
+        border-radius: 8px;
+        border: 2px solid #000;
+        margin: 2px;
+        display: inline-flex;
+        overflow: hidden; /* 确保子元素不会超出容器边界 */
+        position: relative; /* 为伪元素定位做准备 */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* 添加过渡效果 */
+        }
+
+        /* 按钮容器悬停效果 */
+        .button-container:hover {
+        transform: scale(1.1); /* 增加悬停时的缩放比例 */
+        background-color: rgba(180, 231, 238, 0.9); /* 调整悬停时的背景颜色 */
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 增加阴影深度 */
+        }
+
+        /* 按钮样式 */
+        .button-link {
+        display: block; /* 使链接填充整个容器 */
+        width: 100%; /* 设置宽度 */
+        height: fit-content; /* 设置高度 */
+        text-align: center; /* 文本居中 */
+        line-height: 30px; /* 根据按钮高度调整行高，使文本垂直居中 */
+        color: #000; /* 设置文本颜色 */
+        text-decoration: none; /* 去掉下划线 */
+        font-size: 18px;
+        }
+
+        /* 伪元素样式，用于创建模糊背景效果 */
+        .button-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%'><defs><filter id='blur'><feGaussianBlur in='SourceGraphic' stdDeviation='5' /></filter></defs><rect x='0' y='0' width='100%' height='100%' fill='url(#blur)' /></svg>");
+        filter: url(#blur); /* 应用高斯模糊滤镜 */
+        border-radius: 8px; /* 确保模糊效果与容器边界一致 */
+        z-index: -1; /* 确保模糊背景在内容之后 */
+        }
+
     </style>
     
 </head>
 <body>
-<!--<EMBED src="image/nuannuan.mp3" width=300 height=50 type=audio/mpeg loop="-1" autostart="FALSE" volume="100">-->
-
-<!-- 过年了，加个灯笼，祝大家新年快乐。。灯笼过了正月十五再取。。 -->
-<!--<div class="xnkl">-->
-<!--    <div class="deng-box2">-->
-<!--        <div class="deng">-->
-<!--            <div class="xian"></div>-->
-<!--            <div class="deng-a">-->
-<!--                <div class="deng-b">-->
-<!--                    <div class="deng-t">年</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="shui shui-a">-->
-<!--                <div class="shui-c"></div>-->
-<!--                <div class="shui-b"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="deng-box3">-->
-<!--        <div class="deng">-->
-<!--            <div class="xian"></div>-->
-<!--            <div class="deng-a">-->
-<!--                <div class="deng-b">-->
-<!--                    <div class="deng-t">新</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="shui shui-a">-->
-<!--                <div class="shui-c"></div>-->
-<!--                <div class="shui-b"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="deng-box1">-->
-<!--        <div class="deng">-->
-<!--            <div class="xian"></div>-->
-<!--            <div class="deng-a">-->
-<!--                <div class="deng-b">-->
-<!--                    <div class="deng-t">乐</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="shui shui-a">-->
-<!--                <div class="shui-c"></div>-->
-<!--                <div class="shui-b"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="deng-box">-->
-<!--        <div class="deng">-->
-<!--            <div class="xian"></div>-->
-<!--            <div class="deng-a">-->
-<!--                <div class="deng-b">-->
-<!--                    <div class="deng-t">快</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="shui shui-a">-->
-<!--                <div class="shui-c"></div>-->
-<!--                <div class="shui-b"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <center>
     <br>
@@ -170,214 +155,14 @@
     <button onclick="jump_myTranslate()" style="font-size: 20px;border-radius: 13px">我的翻译</button>
     <hr>
 
-    <!-- 学术网站、交流社区111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 -->
-    <div class="sites_container">
-        <a href="https://www.cnki.net/">知网</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.wanfangdata.com.cn/index.html">万方数据服务平台</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://scholar.google.com.hk/?hl=zh-CN">Google学术</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://webofscience.clarivate.cn/wos/alldb/basic-search">Web of science</a>
-    </div>
-    <div class="sites_container">
-        <a href="http://www.20009.net/">格桑花学术</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://tool.yovisun.com/scihub/">SCI-论文下载</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.csdn.net/">CSDN</a>
-    </div>
-    <br>
-    <div class="sites_container">
-        <a href="https://github.com/">Github</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.zhihu.com/">知乎</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://agentgpt.reworkd.ai/">agentgpt</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://chat.openai.com/" >ChatGpt</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://chat.forefront.ai/" >Forefront Chat</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://yiyan.baidu.com/?from=baidu_pc_index">文心一言</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://kimi.moonshot.cn/">Kimi_AI</a>
-    </div>
-    <br>
-    <div class="sites_container">
-        <a href="https://www.panewslab.com/zh/index.html">Web3社区</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.latexlive.com/">LaTeX公式编辑器</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.processon.com/diagrams">processOn画图</a>
-    </div>
-<!-- 资源文档、网盘111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 -->
-    <hr>
-    
-    <div class="sites_container">
-        <a href="https://www.aliyundrive.com/drive">阿里云盘</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://pan.baidu.com/disk/main?_at_=1662336305065#/index?category=all">百度网盘</a>
-    </div>
-    <!-- <div class="sites_container">
-        <a href=""></a>
-    </div> -->
-    <div class="sites_container">
-        <a href="https://www.bilibili.com/">哔哩哔哩</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.bilibili.com/account/history">bilibili历史记录</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://fanyi.baidu.com/?aldtype=16047#auto/zh">百度翻译</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://mubu.com/app">幕布</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.hippopx.com/">图库</a>
-    </div>
-    <br>
-    <div class="sites_container">
-        <a href="https://www.wjx.cn/">问卷星</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://docs.qq.com/desktop/mydoc">腾讯文档</a>
-    </div>
-    <!-- 媒体1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 -->
-    <hr>
-    
-    <div class="sites_container">
-        <a href="https://www.aliyundrive.com/drive/file/backup/62763f4ad6e7b66caa894ec2a0e981c3a0304128">我的网盘音乐</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.btnull.org/">BTnull无名小站</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.cpsctest.com/">茶杯狐</a>
-    </div>
-    <div class="sites_container">
-        <a href="http://svip.daidaijx.cn/index.php">svip影院</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://s.weibo.com/top/summary">微博</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://tool.liumingye.cn/music/#/">音乐下载</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://brie.fi/ng">多人视频</a>
-    </div>
-    <br>
-    <div class="sites_container">
-        <a href="https://www.helloimg.com/user/images">hello图床</a>
-    </div>
-
-<!-- 乱七八糟学习网站11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 -->
-    <hr>
-    <div class="sites_container">
-        <a href="playOrStudy.html">POS</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://cli.im/">草料二维码</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://uutool.cn/text2voice/">文字转语音</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.51voa.com/">VOA Special</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://changjiang.yuketang.cn/v2/web/index">雨课堂</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.xiezuocat.com/#/">秘塔写作猫</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://mail.163.com">网易邮箱</a>
-    </div>
-    <br>
-    <div class="sites_container">
-        <a href="https://mail.v.zzu.edu.cn/coremail/XT/index.jsp?sid=CAkAEUsscgkscXIhecoeiIjNhCqwafLw#mail.list|%7B%22fid%22%3A1%7D">郑大邮箱</a>
-    </div>
-    <div class="sites_container">
-        <a href="http://www.cxy521.com/">程序员导航</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://sms-activate.org/cn">临时国外手机号</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://colab.research.google.com/">Colaboratory</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://drive.google.com/drive/my-drive">Google云盘</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.autodl.com/console/instance/list">AutoDl</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://www.dxsbb.com/">大学生必备网</a>
-    </div>
-    <br>
-    <div class="sites_container">
-        <a href="https://niutrans.com/cloud/overview">小牛翻译控制台</a>
-    </div>
-    <div class="sites_container">
-        <button id="chuansongmen" style="width: 100%; height: 130%; border-radius: 8px;">传送门</button>
-    </div>
-    <div class="sites_container">
-        <a href="https://leetcode.cn/">力扣</a>
-    </div>
-    <div class="sites_container">
-        <a href="https://dash.cloudflare.com/f663348ba1d3840b1cb928ced265624e" >cloudflare</a>
-    </div>
-    
-    <div class="sites_container">
-        <a href="https://ecs.console.aliyun.com/home#/" >阿里云控制台</a>
-    </div>
-    <hr>
-
-    <hr>
-    <!-- <img class="xin" src="image/pink.png" width="50" height="37" onclick="control_music(this)" title="播放/暂停背景音乐"/>
-    <audio id="music" src="image/nuannuan.mp3" loop="loop" autoplay="autoplay"></audio> -->
-<!--        <button onclick="control_music()" style="font-size: 20px">🎵🎵🎵</button><br>-->
-    
-    
-    
-    <!-- <div class="sites_container">
-        <a href="" ></a>
-    </div> -->
-    <!-- <div class="sites_container">
-        <a href="" ></a>
-    </div>-->
-    <!-- <div class="sites_container">
-        <a href="" ></a>
-    </div>-->
-    <!-- <div class="sites_container">
-        <a href="" ></a>
-    </div>-->
-
+    <div id="buttonsContainer"></div>
 </center>
 
 
 </body>
 
 <script>
-    var chuansongmen = document.getElementById("chuansongmen");
+    // var chuansongmen = document.getElementById("chuansongmen");
     const now = new Date();
     const bg_images = [
         "https://vip.helloimg.com/i/2024/04/07/6612617a73ab0.jpg",
@@ -385,7 +170,256 @@
         "https://vip.helloimg.com/i/2024/04/07/66126f8e855d8.jpg",
         "https://vip.helloimg.com/i/2024/04/07/66126c368de86.png",
     ];
+    const numPerLine = 7;
 
+    //1.学术 2.资源文档3.媒体工具4.乱七八糟学习网站
+    const site_array1 = [
+        {
+            'name': '知网',
+            'url': 'https://www.cnki.net/'
+        },
+        {
+            'name':'万方数据服务平台',
+            'url':'https://www.wanfangdata.com.cn/index.html'
+        },
+        {
+            'name':'Google学术',
+            'url':'https://scholar.google.com.hk/?hl=zh-CN'
+        },
+        {
+            'name':'Web of science',
+            'url':'https://webofscience.clarivate.cn/wos/alldb/basic-search'
+        },
+        {
+            'name':'格桑花学术',
+            'url':'http://www.20009.net/'
+        },
+        {
+            'name':'SCI-论文下载',
+            'url':'https://tool.yovisun.com/scihub/'
+        },
+        {
+            'name':'CSDN',
+            'url':'https://www.csdn.net/'
+        },
+        {
+            'name':'Github',
+            'url':'https://github.com/'
+        },
+        {
+            'name':'知乎',
+            'url':'https://www.zhihu.com/'
+        },
+        {
+            'name':'agentgpt',
+            'url':'https://agentgpt.reworkd.ai/'
+        },
+        {
+            'name':'ChatGpt',
+            'url':'https://chat.openai.com/'
+        },
+        {
+            'name':'Forefront Chat',
+            'url':'https://chat.forefront.ai/'
+        },
+        {
+            'name':'文心一言',
+            'url':'https://yiyan.baidu.com/?from=baidu_pc_index'
+        },
+        {
+            'name':'Kimi_AI',
+            'url':'https://kimi.moonshot.cn/'
+        },
+        {
+            'name':'Web3社区',
+            'url':'https://www.panewslab.com/zh/index.html'
+        },
+        {
+            'name':'LaTeX公式编辑器',
+            'url':'https://www.latexlive.com/'
+        },
+        {
+            'name':'processOn画图',
+            'url':'https://www.processon.com/diagrams'
+        }
+    ];
+    const site_array2 = [
+        {
+            'name': '阿里云盘',
+            'url': 'https://www.aliyundrive.com/drive'
+        },
+        {
+            'name':'百度网盘',
+            'url':'https://pan.baidu.com/disk/main?_at_=1662336305065#/index?category=all'
+        },
+        {
+            'name':'哔哩哔哩',
+            'url':'https://www.bilibili.com/'
+        },
+        {
+            'name':'bilibili历史记录',
+            'url':'https://www.bilibili.com/account/history'
+        },
+        {
+            'name':'百度翻译',
+            'url':'https://fanyi.baidu.com/?aldtype=16047#auto/zh'
+        },
+        {
+            'name':'幕布',
+            'url':'https://mubu.com/app'
+        },
+        {
+            'name':'图库',
+            'url':'https://www.hippopx.com/'
+        },
+        {
+            'name':'问卷星',
+            'url':'https://www.wjx.cn/'
+        },
+        {
+            'name':'腾讯文档',
+            'url':'https://docs.qq.com/desktop/mydoc'
+        }
+    ];
+    const site_array3 = [
+        {
+            'name': '我的网盘音乐',
+            'url': 'https://www.aliyundrive.com/drive/file/backup/62763f4ad6e7b66caa894ec2a0e981c3a0304128'
+        },
+        {
+            'name':'BTnull无名小站',
+            'url':'https://www.btnull.org/'
+        },
+        {
+            'name':'茶杯狐',
+            'url':'https://www.cpsctest.com/'
+        },
+        {
+            'name':'svip影院',
+            'url':'http://svip.daidaijx.cn/index.php'
+        },
+        {
+            'name':'微博',
+            'url':'https://s.weibo.com/top/summary'
+        },
+        {
+            'name':'音乐下载',
+            'url':'https://tool.liumingye.cn/music/#/'
+        },
+        {
+            'name':'多人视频',
+            'url':'https://brie.fi/ng'
+        },
+        {
+            'name':'hello图床',
+            'url':'https://www.helloimg.com/user/images'
+        },
+        {
+            'name':'易转换',
+            'url':'https://www.easeconvert.com/ppt-to-svg/'
+        }
+    ];
+    const site_array4 = [
+        {
+            'name': 'POS',
+            'url': 'playOrStudy.html'
+        },
+        {
+            'name':'草料二维码',
+            'url':'https://cli.im/'
+        },
+        {
+            'name':'文字转语音',
+            'url':'https://uutool.cn/text2voice/'
+        },
+        {
+            'name':'VOA Special',
+            'url':'https://www.51voa.com/'
+        },
+        {
+            'name':'雨课堂',
+            'url':'https://changjiang.yuketang.cn/v2/web/index'
+        },
+        {
+            'name':'秘塔写作猫',
+            'url':'https://www.xiezuocat.com/#/'
+        },
+        {
+            'name':'网易邮箱',
+            'url':'https://mail.163.com'
+        },
+        {
+            'name':'郑大邮箱',
+            'url':'https://mail.v.zzu.edu.cn/coremail/XT/index.jsp?sid=CAkAEUsscgkscXIhecoeiIjNhCqwafLw#mail.list|%7B%22fid%22%3A1%7D'
+        },
+        {
+            'name':'程序员导航',
+            'url':'http://www.cxy521.com/'
+        },
+        {
+            'name':'临时国外手机号',
+            'url':'https://sms-activate.org/cn'
+        },
+        {
+            'name':'Colaboratory',
+            'url':'https://colab.research.google.com/'
+        },
+        {
+            'name':'Google云盘',
+            'url':'https://drive.google.com/drive/my-drive'
+        },
+        {
+            'name':'AutoDl',
+            'url':'https://www.autodl.com/console/instance/list'
+        },
+        {
+            'name':'大学生必备网',
+            'url':'https://www.dxsbb.com/'
+        },
+        {
+            'name':'小牛翻译控制台',
+            'url':'https://niutrans.com/cloud/overview'
+        },
+        {
+            'name':'力扣',
+            'url':'https://leetcode.cn/'
+        },
+        {
+            'name':'cloudflare',
+            'url':'https://dash.cloudflare.com/f663348ba1d3840b1cb928ced265624e'
+        },
+        {
+            'name':'阿里云控制台',
+            'url':'https://ecs.console.aliyun.com/home#/'
+        }
+    ];
+    renderButtons(site_array1, numPerLine);
+    renderButtons(site_array2, numPerLine);
+    renderButtons(site_array3, numPerLine);
+    renderButtons(site_array4, numPerLine);
+
+
+    function renderButtons(site_array1, numPerLine) {
+        const container = document.getElementById('buttonsContainer'); // 假设你有一个ID为'buttonsContainer'的元素来容纳这些按钮
+        site_array1.forEach((button, index) => {
+            const siteContainer = document.createElement('div');
+            siteContainer.className = 'button-container';
+
+            const buttonLink = document.createElement('a');
+            buttonLink.className = 'button-link';
+            buttonLink.href = button.url;
+            buttonLink.textContent = button.name;
+
+            siteContainer.appendChild(buttonLink);
+
+            if (index % (numPerLine - 1) === 0 && index>0) {
+                container.appendChild(document.createElement('br'));
+            }
+
+            container.appendChild(siteContainer);
+        });
+        container.appendChild(document.createElement('hr'));
+    }
 
     document.getElementById("wd").focus();
     document.onkeydown = KeyPress;
@@ -429,29 +463,11 @@
     function jump_myTranslate(){
         window.location.href = "myTranslate.html";
     }
-
-    // function control_music(i){
-    //     var audio = document.getElementById('music');
-    //     if(audio.paused){
-    //         audio.play();
-    //         i.width=100;
-    //         i.height=75;
-    //     }
-    //     else{
-    //         audio.pause();
-    //         i.width=50;
-    //         i.height=37;
-    //     }
-    // }
     
     function fun_chachacha() {//清除输入框内容
         var wd = document.getElementById("wd");
         wd.value="";
     }
-
-    chuansongmen.addEventListener("click", ()=>{
-        window.location.href = "http://182.92.208.248/control/tousermainpage";
-    });
 
     // 根据时间段选择图片
     function selectImage() {
