@@ -152,6 +152,7 @@
     <input type="button" value="哔哩哔哩(+2)" onclick="jump_bilibili()" style="background-color: coral; font-size: 20px;border-radius: 13px"/><br>
     <input type="button" value="知乎(+3)" onclick="jump_fanyi_en_ch()" style="font-size: 20px;border-radius: 13px"/>
     <input type="button" value="谷歌搜索(+4)" onclick="jump_fanyi_en_ch()" style="font-size: 20px;border-radius: 13px"/>
+    <input type="button" value="稀土掘金(+5)" onclick="jump_fanyi_en_ch()" style="background-color: rgb(195, 241, 29);font-size: 20px;border-radius: 13px"/>
     <button onclick="jump_myTranslate()" style="font-size: 20px;border-radius: 13px">我的翻译</button>
     <hr>
 
@@ -233,6 +234,10 @@
         {
             'name':'Web3社区',
             'url':'https://www.panewslab.com/zh/index.html'
+        },
+        {
+            'name':'稀土掘金',
+            'url':'https://juejin.cn/'
         },
         {
             'name':'LaTeX公式编辑器',
@@ -459,15 +464,15 @@
         }
 
         if(search_index=='1')//CSDN
-            return "https://so.csdn.net/so/search?spm=1000.2115.3001.7499&q="+wd;
+            return "https://so.csdn.net/so/search?q="+wd;
         else if(search_index=='2')//哔哩哔哩
             return "https://search.bilibili.com/all?keyword="+wd;
-        // else if (search_index==' ')//英译汉
-        //     return "https://fanyi.baidu.com/?aldtype=16047#en/zh/"+wd;
         else if (search_index=='3')//知乎
             return "https://www.zhihu.com/search?type=content&q="+wd;
         else if (search_index=='4')//谷歌
             return "https://www.google.com/search?q="+wd;
+        else if(search_index=='5')//掘金
+            return "https://juejin.cn/search?query="+wd;
         else
             return "https://cn.bing.com/search?q="+wd_init;
     }
