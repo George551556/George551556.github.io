@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="utils/vue.js"></script>
+    <title>赛博掷圣杯</title>
+    <style>
+        /* 添加一些基本的CSS样式 */
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #decision-list {
+            margin-top: 20px;
+        }
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* 变灰效果 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .prompt-box {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        li{
+            list-style-type: none;
+        }
+        button {
+            padding: 10px 20px; /* 内边距 */
+            font-size: 1em; /* 字体大小 */
+            color: #fff; /* 文字颜色 */
+            background: #00ff9c; /* 霓虹绿色背景 */
+            border: none; /* 无边框 */
+            border-radius: 5px; /* 圆角边框 */
+            box-shadow: 0 5px 15px rgba(0, 255, 158, 0.6); /* 霓虹灯效果 */
+            outline: none; /* 点击时无轮廓 */
+            cursor: pointer; /* 鼠标悬停时显示手形图标 */
+            position: relative; /* 相对定位，用于放置动画元素 */
+            overflow: hidden; /* 隐藏溢出内容 */
+            transition: all 0.3s ease; /* 平滑过渡效果 */
+        }
+        .floating-element {
+            position: fixed; /* 固定位置 */
+            bottom: 10px; /* 距离底部的距离 */
+            left: 50%; /* 距离左侧50%，用于居中对齐 */
+            right: auto; /* 右侧自动调整 */
+            transform: translateX(-50%); /* 向左移动50%自身宽度，实现水平居中 */
+            z-index: 0; /* 确保元素在页面上方 */
+            width: 400px; /* 宽度 */
+            height: auto; /* 高度自适应 */
+        }
+        /* #floatingGif {
+            border: 1px solid #ccc; 
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+            width: 60%;
+            height: 50%;
+        } */
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>赛博掷圣杯</h1>
+        <p>请写下你所纠结的两件事：</p>
+        <input type="text" v-model="option1" v-bind:readonly="isReadonly" placeholder="选项1">
+        <input type="text" v-model="option2" v-bind:readonly="isReadonly" placeholder="选项2"><br><br>
+        <button @click="decide" v-bind:disabled="isReadonly" @keyup.enter="decide">确定</button>
+        <button @click="toggleSpeak" >{{allowSpeak?asbt:asbt_1}}</button><br><br>
+        <img id="floatingGif" class="floating-element" v-if="showGao" src="image/shengbei-ret.gif" alt="description">
+        <div id="decision-list">
+            <ul>
+                <li v-for="result in results" :key="result.index">{{ result }}</li>
+            </ul>
+        </div>
+        <!-- <div v-if="decisionMade" class="decision-result">
+            <p>{{ decisionMessage }}</p>
+        </div> -->
+        <div v-if="showPrompt" class="overlay">
+            <div class="prompt-box">
+              <p>{{ decisionMessage }}</p>
+              <button @click="confirm">确定</button>
+            </div>
+          </div>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el:'#app',
+            data:{
+                option1: '',
+                option2: '',
+                dec1:999,
+                dec2:999,
+                results: [],
+                decisionMade: false,
+                showPrompt: false,
+                decisionMessage: '空消息。。。',
+                consecutiveIndecisions: 0,
+                isReadonly: false,
+                speakText:"正在为您掷赛博圣杯",
+                allowSpeak:true,
+                asbt:"语音朗读：开",
+                asbt_1:"语音朗读：关",
+                showGao:false
+            },
+            methods:{
+                decide() {
+                    if (!this.option1 || !this.option2) {
+                        alert('请填写两个选项');
+                        return;
+                    }
+                    this.isReadonly = true;
+                    this.results.push("正在沟通宇宙量子");
+                    this.showGao = true;
+                    if(this.allowSpeak) this.readText("正在为您掷赛博圣杯");
+                    setTimeout(() => {
+                        this.generateRandomDecision();
+                        this.checkDecision();
+                    }, 2500);
+                },
+                generateRandomDecision() {
+                    const decision1 = Math.random() < 0.5 ? 0 : 1;
+                    const decision2 = Math.random() < 0.5 ? 0 : 1;
+                    this.dec1 = decision1;
+                    this.dec2 = decision2;
+                    var temp = "";
+                    if(decision1==1&&decision2==1){
+                        temp = "宇宙量子建议您"+this.option1;
+                    }
+                    else if(decision1==0&&decision2==0)  temp = "宇宙量子建议您"+this.option2;
+                    else temp = "正在重新问天，请给宇宙量子一些时间";
+                    
+                    this.results.push(temp);
+                },
+                checkDecision() {
+                    if (this.dec1==1&&this.dec2==1) {
+                        this.decisionMade = true;
+                        this.decisionMessage = `宇宙量子建议您：${this.option1}`;
+                        if(this.allowSpeak) this.readText(this.decisionMessage);
+                        this.showPrompt = true;
+                    } else if (this.dec1==0&&this.dec2==0) {
+                        this.decisionMade = true;
+                        this.decisionMessage = `宇宙量子建议您：${this.option2}`;
+                        if(this.allowSpeak) this.readText(this.decisionMessage);
+                        this.showPrompt = true;
+                    } else if (this.dec1==1&&this.dec2==0 || this.dec1==0&&this.dec2==1) {
+                        this.consecutiveIndecisions++;
+                        if (this.consecutiveIndecisions >= 3) {
+                            this.decisionMade = true;
+                            this.decisionMessage = '很遗憾，您的问题涉及万般因果，宇宙量子无法为您解决该问题！！！';
+                            if(this.allowSpeak) this.readText(this.decisionMessage);
+                            this.showPrompt = true;
+                        } else {
+                            if(this.allowSpeak) this.readText("逼逼逼");
+                            setTimeout(() => {
+                                this.generateRandomDecision();
+                                this.checkDecision();
+                            }, 2000);
+                        }
+                    }
+                },
+                shuaxin(){
+                    this.option1='';
+                    this.option2='';
+                    this.results=[];
+                    this.dec1 = 999;
+                    this.dec2 = 999;
+                    this.decisionMessage = "";
+                    this.isReadonly = false;
+                    this.consecutiveIndecisions = 0;
+                },
+                confirm(){
+                    //点击提示框的确定按钮之后的操作
+                    this.showPrompt=false;
+                    this.showGao = false;
+                    this.shuaxin();
+                },
+                closePage(){
+                    //隐藏页面内所有元素
+                    document.body.style.display = 'none';
+                },
+                readText(text) {
+                    if (speechSynthesis) {
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        speechSynthesis.speak(utterance);
+                        setTimeout(() => {
+                            console.log('hello');
+                        }, 1000);
+                    } else {
+                        console.log('你的浏览器不支持语音朗读！');
+                    }
+                },
+                toggleSpeak(){
+                    if(this.allowSpeak){
+                        this.allowSpeak = false;
+                        this.decisionMessage = "关闭语音会影响与宇宙量子沟通的质量，从而导致决策失败。请慎重！！！"
+                        this.showPrompt = true;
+                    }else{
+                        this.allowSpeak = true;
+                    }
+                }
+            },
+            mounted(){
+                
+            },
+            created(){
+                
+            }
+        })
+    </script>
+</body>
+</html>
