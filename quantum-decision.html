@@ -91,6 +91,7 @@
             <div class="prompt-box">
               <p>{{ decisionMessage }}</p>
               <button @click="confirm">确定</button>
+              <button @click="cancel" v-if="promptStatus==1">取消</button>
             </div>
           </div>
     </div>
@@ -106,6 +107,7 @@
                 results: [],
                 decisionMade: false,
                 showPrompt: false,
+                promptStatus:0,
                 decisionMessage: '空消息。。。',
                 consecutiveIndecisions: 0,
                 isReadonly: false,
@@ -149,11 +151,13 @@
                         this.decisionMade = true;
                         this.decisionMessage = `宇宙量子建议您：${this.option1}`;
                         if(this.allowSpeak) this.readText(this.decisionMessage);
+                        this.promptStatus = 0;
                         this.showPrompt = true;
                     } else if (this.dec1==0&&this.dec2==0) {
                         this.decisionMade = true;
                         this.decisionMessage = `宇宙量子建议您：${this.option2}`;
                         if(this.allowSpeak) this.readText(this.decisionMessage);
+                        this.promptStatus = 0;
                         this.showPrompt = true;
                     } else if (this.dec1==1&&this.dec2==0 || this.dec1==0&&this.dec2==1) {
                         this.consecutiveIndecisions++;
@@ -161,6 +165,7 @@
                             this.decisionMade = true;
                             this.decisionMessage = '很遗憾，您的问题涉及万般因果，宇宙量子无法为您解决该问题！！！';
                             if(this.allowSpeak) this.readText(this.decisionMessage);
+                            this.promptStatus = 0;
                             this.showPrompt = true;
                         } else {
                             if(this.allowSpeak) this.readText("逼逼逼");
@@ -183,9 +188,17 @@
                 },
                 confirm(){
                     //点击提示框的确定按钮之后的操作
+                    if(this.promptStatus===0){
+                        this.showPrompt=false;
+                        this.showGao = false;
+                        this.shuaxin();
+                    }else if(this.promptStatus===1){
+                        this.allowSpeak = false;
+                        this.showPrompt=false;
+                    }
+                },
+                cancel(){
                     this.showPrompt=false;
-                    this.showGao = false;
-                    this.shuaxin();
                 },
                 closePage(){
                     //隐藏页面内所有元素
@@ -204,8 +217,8 @@
                 },
                 toggleSpeak(){
                     if(this.allowSpeak){
-                        this.allowSpeak = false;
-                        this.decisionMessage = "关闭语音会影响与宇宙量子沟通的质量，从而导致决策失败。请慎重！！！"
+                        this.decisionMessage = "关闭语音会影响与宇宙量子沟通的质量，从而导致决策失败。请慎重！！！";
+                        this.promptStatus = 1;
                         this.showPrompt = true;
                     }else{
                         this.allowSpeak = true;
