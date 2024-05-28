@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="utils/vue.js"></script>
-    <title>赛博掷圣杯</title>
+    <title>赛博掷茭杯</title>
     <style>
         /* 添加一些基本的CSS样式 */
         body {
@@ -72,7 +72,7 @@
 </head>
 <body>
     <div id="app">
-        <h1>赛博掷圣杯</h1>
+        <h1>赛博掷茭杯</h1>
         <p>请写下你所纠结的两件事：</p>
         <input type="text" v-model="option1" v-bind:readonly="isReadonly" placeholder="选项1">
         <input type="text" v-model="option2" v-bind:readonly="isReadonly" placeholder="选项2"><br><br>
@@ -111,7 +111,7 @@
                 decisionMessage: '空消息。。。',
                 consecutiveIndecisions: 0,
                 isReadonly: false,
-                speakText:"正在为您掷赛博圣杯",
+                speakText:"正在为您掷赛博茭杯",
                 allowSpeak:true,
                 asbt:"语音朗读：开",
                 asbt_1:"语音朗读：关",
@@ -126,7 +126,7 @@
                     this.isReadonly = true;
                     this.results.push("正在沟通宇宙量子");
                     this.showGao = true;
-                    if(this.allowSpeak) this.readText("正在为您掷赛博圣杯");
+                    if(this.allowSpeak) this.readText("正在为您掷赛博茭杯");
                     setTimeout(() => {
                         this.generateRandomDecision();
                         this.checkDecision();
