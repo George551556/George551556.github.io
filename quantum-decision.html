@@ -165,7 +165,7 @@
                             this.decisionMade = true;
                             this.decisionMessage = '很遗憾，您的问题涉及万般因果，宇宙量子无法为您解决该问题！！！';
                             if(this.allowSpeak) this.readText(this.decisionMessage);
-                            this.promptStatus = 0;
+                            this.promptStatus = 3;
                             this.showPrompt = true;
                         } else {
                             if(this.allowSpeak) this.readText("逼逼逼");
@@ -195,6 +195,10 @@
                     }else if(this.promptStatus===1){
                         this.allowSpeak = false;
                         this.showPrompt=false;
+                    }else if(this.promptStatus===3){
+                        this.showPrompt = false;
+                        this.shuaxin();
+                        this.closePage();
                     }
                 },
                 cancel(){
