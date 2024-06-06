@@ -62,6 +62,15 @@
             width: 400px; /* 宽度 */
             height: auto; /* 高度自适应 */
         }
+        .red-button {
+            background-color: red;
+            color: white; /* 你可以根据需要调整字体颜色 */
+        }
+
+        .green-button {
+            background-color: rgba(0, 255, 158, 0.6);
+            color: white; /* 你可以根据需要调整字体颜色 */
+        }
         /* #floatingGif {
             border: 1px solid #ccc; 
             box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
@@ -77,7 +86,10 @@
         <input type="text" v-model="option1" v-bind:readonly="isReadonly" placeholder="选项1">
         <input type="text" v-model="option2" v-bind:readonly="isReadonly" placeholder="选项2"><br><br>
         <button @click="decide" v-bind:disabled="isReadonly" @keyup.enter="decide">确定</button>
-        <button @click="toggleSpeak" >{{allowSpeak?asbt:asbt_1}}</button><br><br>
+        <button 
+            @click="toggleSpeak" 
+            :style="{ backgroundColor: allowSpeak ? '#00ff9c' : 'red'}"
+        >{{allowSpeak?asbt:asbt_1}}</button><br><br>
         <img id="floatingGif" class="floating-element" v-if="showGao" src="image/shengbei-ret.gif" alt="description">
         <div id="decision-list">
             <ul>
