@@ -228,6 +228,8 @@
                             navigator.clipboard.readText().then(clipText=>{
                                 this.content_english = "";
                                 this.content_english = clipText;
+                                //直接进行翻译
+                                this.func_EnToCh();
                             }).catch(err=>{
                                 console.error("无法读取剪切板内容", err);
                             });
@@ -239,6 +241,8 @@
                             navigator.clipboard.readText().then(clipText=>{
                                 this.content_chinese = "";
                                 this.content_chinese = clipText;
+                                //直接翻译
+                                this.func_ChToEn();
                             }).catch(err=>{
                                 console.error("无法读取剪切板内容", err);
                             });
