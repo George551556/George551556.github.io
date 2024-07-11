@@ -147,12 +147,13 @@
         <img src="image/chachacha.png" width="28px" height="28px" style="margin-bottom: -5px" onclick="fun_chachacha()" title="清除"/>
     </div>
         <br>
-    <input type="button" value="搜索(默认)" onclick="jump_baidu()" style="background-color: dodgerblue; font-size: 20px;border-radius: 13px"title="按下回车即可搜索">
-    <input type="button" value="CSDN搜索(+1)" onclick="jump_CSDN()" style="background-color: #FC5633; font-size: 20px;border-radius: 13px"/>
-    <input type="button" value="哔哩哔哩(+2)" onclick="jump_bilibili()" style="background-color: #FB7299; font-size: 20px;border-radius: 13px"/><br>
-    <input type="button" value="知乎(+3)" onclick="jump_fanyi_en_ch()" style="background-color: #1772F6;font-size: 20px;border-radius: 13px"/>
-    <input type="button" value="谷歌搜索(+4)" onclick="jump_fanyi_en_ch()" style="font-size: 20px;border-radius: 13px"/>
-    <input type="button" value="稀土掘金(+5)" onclick="jump_fanyi_en_ch()" style="background-color: #1E80FF;font-size: 20px;border-radius: 13px"/>
+    <input type="button" value="搜索(默认)" style="background-color: dodgerblue; font-size: 20px;border-radius: 13px"title="按下回车即可搜索">
+    <input type="button" value="CSDN搜索(+1)" style="background-color: #FC5633; font-size: 20px;border-radius: 13px"/>
+    <input type="button" value="哔哩哔哩(+2)" style="background-color: #FB7299; font-size: 20px;border-radius: 13px"/><br>
+    <input type="button" value="知乎(+3)" style="background-color: #1772F6;font-size: 20px;border-radius: 13px"/>
+    <input type="button" value="谷歌搜索(+4)" style="font-size: 20px;border-radius: 13px"/>
+    <input type="button" value="稀土掘金(+5)" style="background-color: #1E80FF;font-size: 20px;border-radius: 13px"/>
+    <input type="button" value="谷歌学术(+6)" style="background-color: #4285F4;font-size: 20px;border-radius: 13px"/>
     <button onclick="jump_myTranslate()" style="font-size: 20px;border-radius: 13px">我的翻译</button>
     <hr>
 
@@ -484,6 +485,10 @@
             return "https://www.google.com/search?q="+wd;
         else if(search_index=='5')//掘金
             return "https://juejin.cn/search?query="+wd;
+        else if(search_index=='6'){//谷歌学术
+            var temp_wd = wd.replace(/\s/g, '+');
+            return "https://scholar.google.com/scholar?hl=zh-CN&as_sdt=0%2C5&q="+temp_wd+"&btnG=";
+        }
         else
             return "https://cn.bing.com/search?q="+wd_init;
     }
