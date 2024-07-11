@@ -22,6 +22,13 @@
             display: flex;
             justify-content: center;
         }
+        .container_history {
+            /* 使用 Flexbox 布局 */
+            display: flex;
+            justify-content: center;
+            max-height:500px;
+            overflow-y: auto;
+        }
 
         .container div {
             /* 如果需要添加间距，可以使用 margin 或者 flex 属性 */
@@ -48,6 +55,25 @@
             margin-top: 50px;
             user-select: none;
         }
+        .time_history{
+            flex: 0.2;                /* 时间部分的宽度较小，分配1份flex */
+            margin-right: 20px; /* 与文本元素的间隔 */
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0; /* 背景色 */
+            border-radius: 5px; /* 圆角边框 */
+            font-size: 16px; /* 字体大小 */
+            color: #333; /* 字体颜色 */
+        }
+        .text_history{
+            flex: 2;                /* 时间部分的宽度较小，分配1份flex */
+            text-align: left;
+            padding: 10px;
+            background-color: #e9ecef; /* 背景色 */
+            border-radius: 5px; /* 圆角边框 */
+            font-size: 16px; /* 字体大小 */
+            color: #000; /* 字体颜色 */
+        }
 
     </style>
 </head>
@@ -72,8 +98,18 @@
             <button @click="func_copyEnglish" style="margin-right: 100px;font-size: 18px;border-radius: 8px;">复制英文</button>
             <button @click="func_copyChinese" style="font-size: 18px;border-radius: 8px;">复制中文</button>
         </div>
-        <div class="fortune">
+        <hr>
+        <!-- <div class="fortune">
             {{fortune}}
+        </div> -->
+        <div class="container_history">
+            <ul>
+                <li v-for="(item, id) in trans_histories" :key = "id" style="display: flex;">
+                    <div class="time_history">{{item.time}}</div>
+                    <div class="text_history">{{item.en}}</div>
+                    <div class="text_history">{{item.ch}}</div>
+                </li>
+            </ul>
         </div>
 
     </div>
@@ -94,6 +130,7 @@
                 animating_left: false,
                 animating_right: false,
                 fortune:'',
+                trans_histories:[],
             },
             methods:{
                 func_get(){
@@ -155,6 +192,7 @@
                             var temp = data.trans_result[0].dst;
                             this.content_chinese = temp;
                             this.startAnimation(1);
+                            this.addHistoryItem();
                             // this.upload_trans_info(this.content_english, this.content_chinese);
                         } 
                     });
@@ -180,6 +218,7 @@
                             var temp = data.trans_result[0].dst;
                             this.content_english = temp;
                             this.startAnimation(0);
+                            this.addHistoryItem();
                         } 
                     });
                 },
@@ -269,6 +308,20 @@
                         }, 1500);
                     }
                 },
+                addHistoryItem(){
+                    this.trans_histories.unshift({
+                        time: this.getCurrentTime(),
+                        en: this.content_english,
+                        ch: this.content_chinese
+                    })
+                },
+                getCurrentTime() {
+                    const now = new Date(); // 获取当前时间
+                    const hours = String(now.getHours()).padStart(2, '0'); // 获取小时，并确保是两位数
+                    const minutes = String(now.getMinutes()).padStart(2, '0'); // 获取分钟，并确保是两位数
+
+                    return `${hours}:${minutes}`; // 返回格式化的时间字符串
+                },
             },
             mounted(){
                 // 获取我服务器的
@@ -286,19 +339,20 @@
                 // .catch(error=>{
                 //     console.error('fail...')
                 // });
-                //获取公共平台的
-                fetch("https://v1.hitokoto.cn/",{
-                    method:'get',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then(response=>{
-                    return response.json();
-                })
-                .then(data=>{
-                    this.fortune = data.hitokoto+"《"+data.from+"》"+"---"+data.from_who;
-                })
+
+                //获取公共平台的fortune
+                // fetch("https://v1.hitokoto.cn/",{
+                //     method:'get',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                // })
+                // .then(response=>{
+                //     return response.json();
+                // })
+                // .then(data=>{
+                //     this.fortune = data.hitokoto+"《"+data.from+"》"+"---"+data.from_who;
+                // })
             },
             created(){
                 console.log("直接运行created");
