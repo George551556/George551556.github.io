@@ -74,6 +74,54 @@
             font-size: 16px; /* 字体大小 */
             color: #000; /* 字体颜色 */
         }
+        #uploadBox {
+            width: 13%; 
+            height: 250px;
+            border: 2px dashed #007bff;
+            display: flex;
+            float: left;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #fff;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+        #uploadBox:focus {
+            background-color: #e3f7ff;
+        }
+        #uploadBox p {
+        color: #007bff;
+        font-size: 18px;
+        margin: 0;
+        }
+        #uploadBox input[type="file"] {
+        display: none;
+        }
+        /* 状态的不同样式 */
+        .waiting {
+            background-color: #f0f8ff;
+            color: #007bff;
+        }
+        .uploading {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }  
+        .ckInuploadbox{
+            position:absolute;
+            left: 1px;
+            top: 1px;
+            right: 50%;
+        }
 
     </style>
 </head>
@@ -102,7 +150,14 @@
         <!-- <div class="fortune">
             {{fortune}}
         </div> -->
-        <div class="container_history">
+
+        <!-- 上传框 -->
+        <div id="uploadBox" tabindex="0" @click="triggerFileInput" @mouseenter="isMouseInside = true" @mouseleave="isMouseInside = false" :class="uploadBoxClass">
+            <p>{{ uploadBoxMessage }}</p>
+            <input type="file" ref="fileInput" accept="image/*" @change="handleFileSelect"/>
+        </div>
+
+        <div class="container_history" style="width: 76%; margin-left: auto; margin-right: 3%;">
             <ul>
                 <li v-for="(item, id) in trans_histories" :key = "id" style="display: flex;">
                     <div class="time_history">{{item.time}}</div>
@@ -114,6 +169,7 @@
 
     </div>
 
+    <script src="./utils/axios.min.js"></script>
     <script>
         var app = new Vue({
             el:'#app',
@@ -131,6 +187,10 @@
                 animating_right: false,
                 fortune:'',
                 trans_histories:[],
+                uploadedImage: null,
+                isMouseInside: false,
+                uploadBoxClass: '',
+                uploadBoxMessage: '点击或拖拽上传图片，或按Ctrl+V粘贴图片',
             },
             methods:{
                 func_get(){
@@ -322,8 +382,92 @@
 
                     return `${hours}:${minutes}`; // 返回格式化的时间字符串
                 },
+                // ==========================================================
+                triggerFileInput() {
+                    this.$refs.fileInput.click();
+                },
+                handleFileSelect(event) {
+                    const file = event.target.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        this.uploadedImage = file;
+                        this.updateBoxState('uploading', '正在上传...');
+                        this.uploadImage(file);
+                    }
+                },
+                handlePaste(event) {
+                    if (this.isMouseInside) {
+                        const items = event.clipboardData.items; //获取剪贴板中的内容
+                        for (const item of items) {
+                            if (item.type.startsWith('image/')) {
+                                console.log('start upload and receive result...')
+                                const blob = item.getAsFile();
+                                this.uploadedImage = blob;
+                                this.updateBoxState('uploading', '正在上传...');
+                                this.uploadImage(blob);
+                                break;
+                            }else{
+                                this.updateBoxState('failed', '请检查剪贴板内容');
+                            }
+                        }
+                    }
+                },
+                handleDragOver(event) {
+                    event.preventDefault();
+                    this.uploadBoxClass = 'waiting';
+                },
+                handleDrop(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.uploadBoxClass = '';
+                    const file = event.dataTransfer.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        this.uploadedImage = file;
+                        this.updateBoxState('uploading', '正在上传...');
+                        this.uploadImage(file);
+                    }
+                },
+                updateBoxState(state, message) {
+                    this.uploadBoxClass = state;
+                    this.uploadBoxMessage = message;
+                },
+
+                /*下面函数使用https://api.dazheng.site/ocr.html 提供的api，每个token使用次数1000，下面是其他token
+                // rtBIwVnDFX-PaqUSti8tlKCEBy2QtT50cosziMNjLcY=
+                // hPy9WVeABPXqqATIK24LkH8Xh33-322lyb0gtKkAZWw=
+                // 9amJ_GzpAmvNcgDWvxhehfYdTm86j3JyExr_LwVWi_A=
+                // hPy9WVeABPXqqATIK24LkH8Xh33-322lyb0gtKkAZWw= */
+                async uploadImage(image) {
+                    try {
+                        const form = new FormData();
+                        form.append('file', image, image.name);
+                        const response = await axios.post(
+                        'https://api.dazheng.site/ocr/LGaKU8hyvLg6Ow-eLd1Fibeg0_Ga-GSRJ8-8Yu__anE=/',
+                        form
+                        );
+
+                        const result = response.data;
+                        await this.copyToClipboard(result.text);
+                        console.log('该token次数剩余: ', result.remaining_calls);
+                        this.updateBoxState('completed', '识别结果已复制到剪贴板！');
+                    } catch (error) {
+                        console.error('上传失败:', error);
+                        this.updateBoxState('failed', '上传或识别失败，请重试。');
+                    }
+                },
+                async copyToClipboard(text) {
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        console.log('识别结果已复制到剪贴板！');
+                    } catch (err) {
+                        console.error('复制到剪贴板失败:', err);
+                        alert('复制到剪贴板失败，请重试。');
+                    }
+                },
             },
             mounted(){
+                window.addEventListener('paste', this.handlePaste);
+                window.addEventListener('dragover', this.handleDragOver);
+                window.addEventListener('drop', this.handleDrop);
                 // 获取我服务器的
                 // fetch("http://182.92.208.248/str_f")
                 // .then(response=>{

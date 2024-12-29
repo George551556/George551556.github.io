@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片上传与识别</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    #uploadBox {
+      width: 400px;
+      height: 200px;
+      border: 2px dashed #007bff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background-color: #fff;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.3s;
+    }
+    #uploadBox:focus {
+      background-color: #e3f7ff;
+    }
+    #uploadBox p {
+      color: #007bff;
+      font-size: 18px;
+      margin: 0;
+    }
+    #uploadBox input[type="file"] {
+      display: none;
+    }
+    /* 状态的不同样式 */
+    .waiting {
+      background-color: #f0f8ff;
+      color: #007bff;
+    }
+    .uploading {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .completed {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .failed {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="uploadBox" tabindex="0">
+    <p>点击或拖拽上传图片，或按Ctrl+V粘贴图片</p>
+    <input type="file" id="fileInput" accept="image/*" />
+  </div>
+
+  <script src="./utils/axios.min.js"></script>
+  <script>
+    const uploadBox = document.getElementById('uploadBox');
+    const fileInput = document.getElementById('fileInput');
+    let uploadedImage = null;
+    let isMouseInside = false; // 标记鼠标是否在框内
+
+    // 激活上传框的功能
+    uploadBox.addEventListener('click', () => fileInput.click());
+    uploadBox.addEventListener('focus', () => {
+      fileInput.disabled = false;
+    });
+
+    // 处理文件上传
+    fileInput.addEventListener('change', handleFileSelect);
+    uploadBox.addEventListener('dragover', handleDragOver);
+    uploadBox.addEventListener('drop', handleDrop);
+    window.addEventListener('paste', handlePaste);
+    window.addEventListener('keydown', handleKeyDown);
+
+    // 鼠标进入和离开框的事件
+    uploadBox.addEventListener('mouseenter', () => { isMouseInside = true; });
+    uploadBox.addEventListener('mouseleave', () => { isMouseInside = false; });
+
+    async function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith('image/')) {
+        uploadedImage = file;
+        updateBoxState('uploading', '正在上传...');
+        await uploadImage(uploadedImage);
+      }
+    }
+
+    function handleDragOver(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      uploadBox.style.backgroundColor = '#e3f7ff';
+    }
+
+    function handleDrop(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      uploadBox.style.backgroundColor = '#fff';
+      const file = event.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        uploadedImage = file;
+        updateBoxState('uploading', '正在上传...');
+        uploadImage(uploadedImage);
+      }
+    }
+
+    function handlePaste(event) {
+      if (isMouseInside) { // 只有在框内时才允许粘贴
+        const items = event.clipboardData.items;
+        for (const item of items) {
+          if (item.type.startsWith('image/')) {
+            const blob = item.getAsFile();
+            uploadedImage = blob;
+            updateBoxState('uploading', '正在上传...');
+            uploadImage(uploadedImage);
+            break;
+          }
+        }
+      } else {
+        event.preventDefault(); // 如果鼠标不在框内，阻止粘贴
+      }
+    }
+
+    function handleKeyDown(event) {
+      // 检查是否按下了 Ctrl + V 且鼠标在框内
+      if (event.ctrlKey && event.key === 'v' && !isMouseInside) {
+        event.preventDefault(); // 阻止粘贴
+      }
+    }
+
+    async function uploadImage(image) {
+      try {
+        const form = new FormData();
+        form.append('file', image, image.name);
+
+        const response = await axios.post(
+          'https://api.dazheng.site/ocr/LGaKU8hyvLg6Ow-eLd1Fibeg0_Ga-GSRJ8-8Yu__anE=/',
+          form
+        );
+
+        const result = response.data;
+        await copyToClipboard(JSON.stringify(result, null, 2));
+        updateBoxState('completed', '识别结果已复制到剪贴板！');
+      } catch (error) {
+        console.error('上传失败:', error);
+        updateBoxState('failed', '上传或识别失败，请重试。');
+      }
+    }
+
+    async function copyToClipboard(text) {
+      try {
+        // 使用 Clipboard API 复制到剪贴板
+        await navigator.clipboard.writeText(text);
+        console.log('识别结果已复制到剪贴板！');
+      } catch (err) {
+        console.error('复制到剪贴板失败:', err);
+        alert('复制到剪贴板失败，请重试。');
+      }
+    }
+
+    // 更新框的状态
+    function updateBoxState(state, message) {
+      const p = uploadBox.querySelector('p');
+      p.textContent = message;
+
+      // 清除已有的状态类
+      uploadBox.classList.remove('waiting', 'uploading', 'completed', 'failed');
+      
+      // 添加新的状态类
+      uploadBox.classList.add(state);
+    }
+  </script>
+
+</body>
+</html>
