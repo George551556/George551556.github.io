@@ -46,13 +46,13 @@
             box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
             position: relative;
             background: transparent; /* 确保背景透明，保持背景图像可见 */
-            transition: box-shadow 0.3s ease;
             backdrop-filter: blur(0); /* 初始不模糊 */
+            transition: box-shadow 0.3s ease, backdrop-filter 0.4s ease;
         }
 
         .main_search:focus-within {
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* 强化焦点时的阴影 */
-            backdrop-filter: blur(3px); /* 焦点时应用高斯模糊 */
+            backdrop-filter: blur(4px); /* 焦点时应用高斯模糊 */
         }
 
         .sites_container {
