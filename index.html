@@ -36,13 +36,25 @@
             line-height: 0;
             font-size: 0;
         }
-        .main_search{
+
+        .main_search {
             width: fit-content;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            padding-left: 13px;
+            padding-right: 13px;
+            padding-bottom: 10px;
+            border-radius: 25px;
+            box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+            position: relative;
+            background: transparent; /* 确保背景透明，保持背景图像可见 */
+            transition: box-shadow 0.3s ease;
+            backdrop-filter: blur(0); /* 初始不模糊 */
         }
-        .main_search:focus-within{
-            box-shadow: 0 0 10px rgba(0,0,0,0.6);
+
+        .main_search:focus-within {
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.8); /* 强化焦点时的阴影 */
+            backdrop-filter: blur(3px); /* 焦点时应用高斯模糊 */
         }
+
         .sites_container {
             width: 160px;
             height: fit-content;
@@ -55,7 +67,7 @@
             overflow: hidden; /* 确保子元素不会超出容器边界 */
             position: relative; /* 为伪元素定位做准备 */
         }
-        .sites_container::before {
+        .sites_container::before {/*这个sites_container不再使用*/
             content: "";
             position: absolute;
             top: 0;
@@ -88,23 +100,22 @@
 
         /* 按钮容器样式 */
         .button-container {
-        width: 10%;
-        height: fit-content;
-        background-color: rgba(232, 245, 254, 0.7); /* 设置背景颜色为半透明 */
-        border-radius: 8px;
-        border: 2px solid #000;
-        margin: 2px;
-        display: inline-flex;
-        overflow: hidden; /* 确保子元素不会超出容器边界 */
-        position: relative; /* 为伪元素定位做准备 */
-        transition: transform 0.3s ease, box-shadow 0.3s ease; /* 添加过渡效果 */
+            width: 10%;
+            height: fit-content;
+            background-color: rgba(232, 245, 254, 0.7); /* 设置背景颜色为半透明 */
+            border-radius: 8px;
+            border: 2px solid #000;
+            margin: 2px;
+            display: inline-flex;
+            overflow: hidden; /* 确保子元素不会超出容器边界 */
+            position: relative; /* 为伪元素定位做准备 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* 添加过渡效果 */
         }
-
         /* 按钮容器悬停效果 */
         .button-container:hover {
-        transform: scale(1.1); /* 增加悬停时的缩放比例 */
-        background-color: rgba(180, 231, 238, 0.9); /* 调整悬停时的背景颜色 */
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 增加阴影深度 */
+            transform: scale(1.1); /* 增加悬停时的缩放比例 */
+            background-color: rgba(180, 231, 238, 0.9); /* 调整悬停时的背景颜色 */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 增加阴影深度 */
         }
 
         /* 按钮样式 */
@@ -141,8 +152,8 @@
 <center>
     <br>
     <br>
-    <h2>搜索</h2>
     <div class="main_search">
+        <h2>搜索</h2>
         <input id="wd" style="font-size: 23px;border-radius: 6px;" size="38" placeholder=" 🔍"/>
         <img src="image/chachacha.png" width="28px" height="28px" style="margin-bottom: -5px" onclick="fun_chachacha()" title="清除"/>
     </div>
