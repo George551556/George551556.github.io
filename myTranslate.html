@@ -139,7 +139,7 @@
             <button @click="clearAndPaste(1)" style="font-size: 18px;border-radius: 8px;">清空并粘贴</button>
         </div>
         <div class="container">
-            <textarea v-model="content_english" placeholder="英文区域" autofocus="true" @keyup.enter="func_EnToCh" rows="15" class="area_raw" :style="{animation:animating_left ? 'flash 0.5s infinite':'none', backgroundColor:bgColor}"></textarea>
+            <textarea ref="englishTextarea" v-model="content_english" placeholder="英文区域" autofocus="true" @keyup.enter="func_EnToCh" rows="15" class="area_raw" :style="{animation:animating_left ? 'flash 0.5s infinite':'none', backgroundColor:bgColor}"></textarea>
             <br>
             <textarea v-model="content_chinese" placeholder="中文区域" @keyup.enter="func_ChToEn" rows="15" class="area_ret":style="{animation:animating_right ? 'flash 0.5s infinite':'none', backgroundColor:bgColor}"></textarea>
             <br>
@@ -467,6 +467,7 @@
                 },
             },
             mounted(){
+                this.$refs.englishTextarea.focus();
                 window.addEventListener('paste', this.handlePaste);
                 window.addEventListener('dragover', this.handleDragOver);
                 window.addEventListener('drop', this.handleDrop);
